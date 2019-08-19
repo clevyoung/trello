@@ -1,4 +1,5 @@
 import axios from "axios";
+const domain = "http://localhost:3000"
 
 const request = (method, url, data) => {
   return axios({
@@ -6,14 +7,12 @@ const request = (method, url, data) => {
     url,
     data
   })
-    .then(res => {
-      console.log(res);
-    })
-    .catch(error => {
-      console.log(error);
-    });
 };
 
-export const login = ({ email, password }) => {
-  return request("post", "/login", { email, password }).then(() => {});
+export const setAuthInHeader = (token) =>{
+  axios.defaults.headers.common['Authorization'] = token;
+}
+
+export const login = (email, password ) => {
+  return request("post", `${domain}/login`, { email, password }).then(({data}) => data)
 };
