@@ -1,20 +1,21 @@
 <template>
   <div class="login">
     <h2>Log in to Trello</h2>
-    <form>
+    <form @submit.prevent="onLoginSumbit">
       <div>
         <label for="email">Email</label>
         <input
           class="form-control"
           type="text"
           name="email"
+          v-model="email"
           autofocus
           placeholder="e.g., test@test.com"
         />
       </div>
       <div>
         <label for="password">Passwrod</label>
-        <input class="form-control" type="password" placeholder="123123" />
+        <input class="form-control" v-model="password" type="password" placeholder="123123" />
       </div>
       <button class="btn" type="submit">Log In</button>
     </form>
@@ -23,6 +24,17 @@
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    onLoginSumbit() {}
+  }
+};
 </script>
 
 <style>
