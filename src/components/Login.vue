@@ -28,15 +28,26 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      email: "",
-      password: ""
+      email: "test@test.com",
+      password: "123123",
+      returnPath:"",
+      error: ""
     };
+  },
+  created(){
+    this.returnPath = this.$route.query.returnPath || "/"
   },
 
   methods: {
     ...mapActions(["LOGIN"]),
     onLoginSumbit() {
-      this.LOGIN();
+      this.LOGIN({email: this.email,password : this.password}).then(() => {
+        //throw Error;
+        //this.$router.push(this.returnPath);
+      }).catch((err) => {
+        //console.log(err);
+        this.error = err.response.data.err
+      })
     }
   }
 };
