@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import { mapActions } from "vuex";
 export default {
   data() {
     return {
@@ -31,8 +32,12 @@ export default {
       password: ""
     };
   },
+
   methods: {
-    onLoginSumbit() {}
+    ...mapActions(["LOGIN"]),
+    onLoginSumbit() {
+      this.LOGIN();
+    }
   }
 };
 </script>
