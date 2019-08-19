@@ -17,7 +17,12 @@
         <label for="password">Passwrod</label>
         <input class="form-control" v-model="password" type="password" placeholder="123123" />
       </div>
-      <button class="btn" type="submit">Log In</button>
+      <button
+        class="btn"
+        type="submit"
+        :disabled="!isValidForm"
+        :class="{'btn-success' : isValidForm}"
+      >Log In</button>
     </form>
     <p class="error"></p>
   </div>
@@ -28,26 +33,33 @@ import { mapActions } from "vuex";
 export default {
   data() {
     return {
-      email: "test@test.com",
-      password: "123123",
-      returnPath:"",
+      email: "",
+      password: "",
+      returnPath: "",
       error: ""
     };
   },
-  created(){
-    this.returnPath = this.$route.query.returnPath || "/"
+  computed: {
+    isValidForm() {
+      return this.email && this.password;
+    }
+  },
+  created() {
+    this.returnPath = this.$route.query.returnPath || "/";
   },
 
   methods: {
     ...mapActions(["LOGIN"]),
     onLoginSumbit() {
-      this.LOGIN({email: this.email,password : this.password}).then(() => {
-        //throw Error;
-        //this.$router.push(this.returnPath);
-      }).catch((err) => {
-        //console.log(err);
-        this.error = err.response.data.err
-      })
+      this.LOGIN({ email: this.email, password: this.password })
+        .then(() => {
+          //throw Error;
+          this.$router.push(this.returnPath);
+        })
+        .catch(err => {
+          //console.log(err);
+          this.error = err.response.data.err;
+        });
     }
   }
 };
