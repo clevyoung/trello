@@ -14,7 +14,7 @@ const requireAuth = (from, to, next) => {
 //라우터 인스턴스 생성
 const router = new VueRouter({
   mode: "history",
-  routes: [{ path: "/login", component: Login, beforeEnter: requireAuth() }]
+  routes: [{ path: "/login", component: Login }]
 });
 
 export default router;
