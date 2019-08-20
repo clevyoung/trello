@@ -2,20 +2,46 @@
   <div>
     <div class="home-title">Personal Boards</div>
     <div class="board-list" ref="boardList">
-      <div class="board-item">
-          <div class="board-item-title"></div>
+      <div class="board-item" v-for="(item, i) in boards" :key="i" :data-bgColor="item.bgColor">
+        <router-link :to="`/board/${item.id}`">
+          <div class="board-item-title">{{item.title}}</div>
+        </router-link>
       </div>
       <div class="board-item board-item-new">
-        <a class="new-board-btn" href="" >
-          Create new board...
-        </a>
+        <a class="new-board-btn" href>Create new board...</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+export default {
+  data() {
+    return {};
+  },
+  created() {
+    this.fetchData();
+  },
+  updated() {
+    //updated훅 => 돔에 접근 가능
+    Array.from(document.querySelectorAll(".board-item")).forEach(el => {
+      el.style.backgroundColor = el.dataset.bgColor || "#ddd"; //넘어온 데이터에서 bgColor가 없으면 #ddd 색상 적용
+    });
+  },
+  computed: {
+    ...mapState({ boards: "boards" })
+  },
+  methods: {
+    ...mapActions(["FETCH_BOARDS"]),
+    fetchData() {
+      //fetch data
+      this.FETCH_BOARDS();
+    }
+  }
+};
 
+//
 </script>
 
 <style>
@@ -46,7 +72,7 @@
 }
 .board-item a:hover,
 .board-item a:focus {
-  background-color: rgba(0,0,0, .1);
+  background-color: rgba(0, 0, 0, 0.1);
   color: #666;
 }
 .board-item-title {
