@@ -4,13 +4,26 @@
       <a href>Home</a>
     </div>
     <div class="header-auth">
-      <a href>Logout</a>
-      <a href>Login</a>
+      <a href @click="logout" v-if="isAuth">Logout</a>
+      <router-link v-else to="/login">Login</router-link>
     </div>
   </nav>
 </template>
 
 <script>
+import { mapMutations, mapGetters } from "vuex";
+
+export default {
+  computed: {
+    ...mapGetters(["isAuth"])
+  },
+  methods: {
+    ...mapMutations(["LOGOUT"]),
+    logout() {
+      this.LOGOUT();
+    }
+  }
+};
 </script>
 
 <style>
