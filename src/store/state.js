@@ -1,5 +1,6 @@
 const state = {
-    accessToken : null
-}
+  accessToken: null,
+  boards: []
+};
 
 export default state;
