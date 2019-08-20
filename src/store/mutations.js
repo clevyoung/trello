@@ -12,6 +12,9 @@ const mutations = {
     state.accessToken = null;
     delete localStorage.accessToken;
     setAuthInHeader();
+  },
+  SET_BOARDS(state, { list }) {
+    state.boards = list;
   }
 };
 
