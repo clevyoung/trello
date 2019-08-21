@@ -24,3 +24,10 @@ export const fetchBoard = () => {
     return res.data;
   });
 };
+
+export const createBoard = ({ title }) => {
+  return request("post", `${domain}/boards`, { title }).then(res => {
+    console.log(res);
+    return res.data;
+  });
+};
