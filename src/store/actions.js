@@ -11,6 +11,11 @@ const actions = {
     return api.fetchBoard().then(data => {
       commit("SET_BOARDS", data);
     });
+  },
+  CREATE_BOARD({ dispatch }, { title }) {
+    return api.createBoard({ title }).then(_ => {
+      dispatch("FETCH_BOARDS");
+    });
   }
 };
 
