@@ -1,6 +1,7 @@
 const state = {
   accessToken: null,
-  boards: []
+  boards: [],
+  isAddBoard: false // 기본값 false
 };
 
 export default state;
