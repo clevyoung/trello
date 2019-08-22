@@ -4,12 +4,14 @@
       <div class="board">
         <div class="board-header">
           <input class="form-control" type="text" />
-          <span class="board-title"></span>
+          <span class="board-title">{{board.title}}</span>
           <a class="board-header-btn show-menu" href>... Show Menu</a>
         </div>
         <div class="list-section-wrapper">
           <div class="list-section">
-            <div class="list-wrapper"></div>
+            <div class="list-wrapper" v-for="list in board.lists" :key="list.pos">
+              <List :list=list />
+            </div>
           </div>
         </div>
       </div>
@@ -18,6 +20,31 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex';
+import List from "../components/List.vue";
+export default{
+  components:{
+    List
+  },
+  created(){
+    this.fetchData();
+  },
+  
+  computed:{
+    ...mapState({board : "board"})
+  },
+  methods: {
+    ...mapActions(["FETCH_BOARD"]),
+    fetchData(){
+      console.log(this.board)
+      const id = this.$route.params.bid;
+      this.FETCH_BOARD({id}).then(() => {
+      })
+    },
+   
+
+  }
+}
 </script>
 
 <style>

@@ -1,14 +1,45 @@
 <template>
   <div class="add-card">
-    <form>
-      <input class="form-control" type="text" />
-      <button class="btn btn-success" type="submit">Add Card</button>
-      <a class="cancel-add-btn" href>&times;</a>
+    <form @submit.prevent="onAddCard">
+      <input class="form-control" type="text" v-model="inputCardTitle" ref="inputCardTitle"/>
+      <button class="btn btn-success" type="submit" :disabled="!checkCardTitle">Add Card</button>
+      <!-- close이벤트 방출 -->
+      <a class="cancel-add-btn" href @click.prevent="$emit('close')" >&times;</a> 
+      
     </form>
   </div>
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+export default{
+  props:["listId", "pos"],
+  data(){
+    return{
+      inputCardTitle:""
+    }
+  },
+  computed : {
+    checkCardTitle(){
+      return !!this.inputCardTitle.trim().length
+    }
+  },
+  mounted(){
+    this.$refs.inputCardTitle.focus();
+  },
+  methods:{
+    ...mapActions(['CREATE_CARD']),
+    onAddCard(){
+      const {inputCardTitle, listId, pos} = this;
+     this.CREATE_CARD({title: inputCardTitle, listId, pos}).finally((_) => {
+       this.inputCardTitle = ""
+     })
+    },
+    onCancelAdd(){
+
+    }
+  }
+}
 </script>
 
 <style>

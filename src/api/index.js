@@ -19,15 +19,16 @@ export const login = (email, password) => {
   );
 };
 
-export const fetchBoard = () => {
-  return request("get", `${domain}/boards`).then(res => {
+export const fetchBoard = (id) => {
+  return id ? request("get", `${domain}/boards/${id}`).then(res => res.data) : request("get", `${domain}/boards`).then(res => res.data)
+};
+
+export const createBoard = (title) => {
+  return request("post", `${domain}/boards`, { title }).then(res => {
     return res.data;
   });
 };
 
-export const createBoard = ({ title }) => {
-  return request("post", `${domain}/boards`, { title }).then(res => {
-    console.log(res);
-    return res.data;
-  });
-};
+export const createCard = ({title, listId, pos}) => {
+  return request("post", `${domain}/cards`, {title, listId, pos}).then((res) => res.data)
+}

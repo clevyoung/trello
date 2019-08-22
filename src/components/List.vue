@@ -1,15 +1,47 @@
 <template>
   <div class="list">
     <div class="list-header">
-      <div class="list-header-title"></div>
+      <div class="list-header-title">{{list.title}}</div>
+      
+      <a class="delete-list-btn" href=""></a>
     </div>
 
-    <div class="card-list"></div>
-    <a class="add-card-btn" href>&plus; Add a card...</a>
+    <div class="card-list">
+      <div class="empty-card-item"></div>
+    </div>
+    <div v-if="isAddCard">
+      <!-- close이벤트를 받아서 처리 -->
+      <AddCard :listId = list.id :pos=list.pos @close="isAddCard=false"/>
+    </div>
+    <div v-if="!isAddCard">
+        <a class="add-card-btn" href @click.prevent="onAddCard">&plus; Add a card...</a>
+    </div>
+    
   </div>
 </template>
 
 <script>
+import AddCard from "../components/AddCard";
+export default{
+  props:['list'],
+  data(){
+    return{
+      isAddCard : false
+    }
+  },
+ 
+  components:{
+    AddCard
+  },
+  props : ['list'],
+
+  methods:{
+      onAddCard(){
+        this.isAddCard = true;  
+      }
+    }
+  }
+
 </script>
 
 <style>
