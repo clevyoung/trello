@@ -3,7 +3,7 @@
     <div class="home-title">Personal Boards</div>
     <div class="board-list" ref="boardList">
       <div class="board-item" v-for="(item, i) in boards" :key="i" :data-bgColor="item.bgColor">
-        <router-link :to="`/board/${item.id}`">
+        <router-link :to="`/b/${item.id}`">
           <div class="board-item-title">{{item.title}}</div>
         </router-link>
       </div>
