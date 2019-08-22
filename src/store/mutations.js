@@ -16,6 +16,9 @@ const mutations = {
   SET_BOARDS(state, { list }) {
     state.boards = list;
   },
+  SET_BOARD(state, item ){
+    state.board = item;
+  },
   SET_IS_ADD_BOARD(state, toggle) {
     state.isAddBoard = toggle;
   }
