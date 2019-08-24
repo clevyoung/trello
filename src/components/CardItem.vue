@@ -1,12 +1,15 @@
 <template>
   <div class="card-item">
-    <div></div>
-    <div class="card-item-meta">&equiv;</div>
+    <div>{{data.title}}</div>
+    <div class="card-item-meta" v-if="data.description">&equiv;</div>
     <a class="delete-card-btn" href>&times;</a>
   </div>
 </template>
 
 <script>
+export default{
+  props : ['data']
+}
 </script>
 
 <style>

@@ -27,19 +27,28 @@ export default{
     List
   },
   created(){
-    this.fetchData();
+    this.fetchData().then(_=>{
+      //this.inputTitle = this.board.title
+      
+    })
   },
-  
+  updated(){
+    console.log(this.board)
+    console.log("업데이트된 상태")
+  },
+  watch: {
+    $route(){
+      this.fetchData()
+    }
+  },
   computed:{
     ...mapState({board : "board"})
   },
   methods: {
     ...mapActions(["FETCH_BOARD"]),
-    fetchData(){
-      console.log(this.board)
-      const id = this.$route.params.bid;
-      this.FETCH_BOARD({id}).then(() => {
-      })
+       fetchData(){
+        console.log("오잉")
+       return this.FETCH_BOARD(this.$route.params.bid)
     },
    
 

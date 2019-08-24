@@ -7,13 +7,14 @@
     </div>
 
     <div class="card-list">
+      <CardItem v-for="card in list.cards" :data="card" :key="card.id"/>
       <div class="empty-card-item"></div>
     </div>
     <div v-if="isAddCard">
       <!-- close이벤트를 받아서 처리 -->
       <AddCard :listId = list.id :pos=list.pos @close="isAddCard=false"/>
     </div>
-    <div v-if="!isAddCard">
+    <div v-else>
         <a class="add-card-btn" href @click.prevent="onAddCard">&plus; Add a card...</a>
     </div>
     
@@ -22,6 +23,7 @@
 
 <script>
 import AddCard from "../components/AddCard";
+import CardItem from "../components/CardItem"
 export default{
   props:['list'],
   data(){
@@ -31,7 +33,8 @@ export default{
   },
  
   components:{
-    AddCard
+    AddCard,
+    CardItem
   },
   props : ['list'],
 

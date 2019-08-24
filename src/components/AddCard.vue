@@ -2,10 +2,9 @@
   <div class="add-card">
     <form @submit.prevent="onAddCard">
       <input class="form-control" type="text" v-model="inputCardTitle" ref="inputCardTitle"/>
-      <button class="btn btn-success" type="submit" :disabled="!checkCardTitle">Add Card</button>
-      <!-- close이벤트 방출 -->
+      <button class="btn btn-success" type="submit" :disabled="invalidInput">Add Card</button>
+      <!-- close이벤트를  부모에게 전달 -->
       <a class="cancel-add-btn" href @click.prevent="$emit('close')" >&times;</a> 
-      
     </form>
   </div>
 </template>
@@ -20,23 +19,32 @@ export default{
     }
   },
   computed : {
-    checkCardTitle(){
-      return !!this.inputCardTitle.trim().length
+    invalidInput(){
+      return !this.inputCardTitle.trim()
     }
   },
   mounted(){
     this.$refs.inputCardTitle.focus();
+    this.setupClickOutside(this.$el);
+    //부모 컴포넌트에 마운트되서 보여질 때 돔처리
   },
   methods:{
     ...mapActions(['CREATE_CARD']),
     onAddCard(){
+      if(this.invalidInput) return
       const {inputCardTitle, listId, pos} = this;
-     this.CREATE_CARD({title: inputCardTitle, listId, pos}).finally((_) => {
+      this.CREATE_CARD({title: inputCardTitle, listId, pos}).finally((_) => {
        this.inputCardTitle = ""
      })
     },
     onCancelAdd(){
 
+    },
+    setupClickOutside(el){
+      document.querySelector('body').addEventListener('click', e=>{
+        if(el.contains(e.target) || e.target.className =="add-card-btn") return;
+        this.$emit('close')
+      })
     }
   }
 }
