@@ -12,20 +12,30 @@ const actions = {
       commit("SET_BOARDS", data);
     });
   },
-  FETCH_BOARD({commit}, id){
-    return api.fetchBoard(id).then(({item}) => {
-        commit("SET_BOARD", item)
-    })
+  FETCH_BOARD({ commit }, id) {
+    return api.fetchBoard(id).then(({ item }) => {
+      commit("SET_BOARD", item);
+    });
   },
   CREATE_BOARD({ dispatch }, { title }) {
     return api.createBoard(title).then(_ => {
       dispatch("FETCH_BOARDS");
     });
   },
-  CREATE_CARD({state, dispatch}, {title, listId, pos}){
-    return api.createCard({title, listId, pos}).then((data) => {
-      dispatch("FETCH_BOARD", state.board.id)
-    })
+  CREATE_CARD({ state, dispatch }, { title, listId, pos }) {
+    return api.createCard({ title, listId, pos }).then(data => {
+      dispatch("FETCH_BOARD", state.board.id);
+    });
+  },
+  FETCH_CARD({ commit }, { id }) {
+    return api.fetchCard(id).then(data => {
+      commit("SET_CARD", data.item);
+    });
+  },
+  UPDATE_CARD({ dispatch, state }, { id, title, description, pos, listId }) {
+    return api.updateCard(id, { title, description, pos, listId }).then(() => {
+      dispatch("FETCH_BOARD", state.board.id);
+    });
   }
 };
 

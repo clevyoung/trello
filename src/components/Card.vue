@@ -2,9 +2,17 @@
   <Modal class="modal-card">
     <div slot="header" class="modal-card-header">
       <div class="modal-card-header-title">
-        <input class="form-control" type="text" />
+        <input
+          class="form-control"
+          type="text"
+          :value="card.title"
+          :readonly="!toggleTitle"
+          @click="toggleTitle = true"
+          @blur="onBlurTitle"
+          ref="inputTitle"
+        />
       </div>
-      <a class="modal-close-btn" href>&times;</a>
+      <a class="modal-close-btn" href @click.prevent="onClose">&times;</a>
     </div>
     <div slot="body">
       <h3>Description</h3>
@@ -13,6 +21,10 @@
         cols="30"
         rows="3"
         placeholder="Add a more detailed description..."
+        :readonly="!toggleDesc"
+        @click="toggleDesc=true"
+        @blur="onBlurDesc"
+        ref="inputDesc"
       ></textarea>
     </div>
     <div slot="footer"></div>
@@ -20,6 +32,55 @@
 </template>
 
 <script>
+import Modal from "../components/Modal.vue";
+import { mapActions, mapState } from "vuex";
+export default {
+  data() {
+    return {
+      toggleTitle: false,
+      toggleDesc: false
+    };
+  },
+  components: {
+    Modal
+  },
+  computed: {
+    ...mapState({
+      card: "card",
+      board: "board"
+    })
+  },
+  created() {
+    this.fetchCard();
+  },
+  methods: {
+    ...mapActions(["FETCH_CARD", "UPDATE_CARD"]),
+    onClose() {
+      this.$router.push(`/b/${this.board.id}`);
+    },
+    onBlurTitle() {
+      this.toggleTitle = false;
+      const title = this.$refs.inputTitle.value.trim();
+      if (!title) return;
+
+      this.UPDATE_CARD({ id: this.card.id, title }).then(() => {
+        this.fetchCard();
+      });
+    },
+    onBlurDesc() {
+      this.toggleTitle = false;
+      const description = this.$refs.inputDesc.value.trim();
+      if (!description) return;
+      this.UPDATE_CARD({ id: this.card.id, description }).then(() => {
+        //this.fetchCard();
+      });
+    },
+    fetchCard() {
+      const id = this.$route.params.cid;
+      this.FETCH_CARD({ id });
+    }
+  }
+};
 </script>
 
 <style>
