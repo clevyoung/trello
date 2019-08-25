@@ -19,16 +19,30 @@ export const login = (email, password) => {
   );
 };
 
-export const fetchBoard = (id) => {
-  return id ? request("get", `${domain}/boards/${id}`).then(res => res.data) : request("get", `${domain}/boards`).then(res => res.data)
+export const fetchBoard = id => {
+  return id
+    ? request("get", `${domain}/boards/${id}`).then(res => res.data)
+    : request("get", `${domain}/boards`).then(res => res.data);
 };
 
-export const createBoard = (title) => {
+export const createBoard = title => {
   return request("post", `${domain}/boards`, { title }).then(res => {
     return res.data;
   });
 };
 
-export const createCard = ({title, listId, pos}) => {
-  return request("post", `${domain}/cards`, {title, listId, pos}).then((res) => res.data)
-}
+export const createCard = ({ title, listId, pos }) => {
+  return request("post", `${domain}/cards`, { title, listId, pos }).then(
+    res => res.data
+  );
+};
+
+export const fetchCard = id => {
+  return request("get", `${domain}/cards/${id}`).then(res => res.data);
+};
+
+export const updateCard = (id, payload) => {
+  console.log(id);
+  console.log(payload);
+  return request("put", `${domain}/cards/${id}`, payload).then(res => res.data);
+};

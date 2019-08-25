@@ -10,50 +10,94 @@
         <div class="list-section-wrapper">
           <div class="list-section">
             <div class="list-wrapper" v-for="list in board.lists" :key="list.pos">
-              <List :list=list />
+              <List :list="list" />
             </div>
           </div>
         </div>
       </div>
     </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from "vuex";
 import List from "../components/List.vue";
-export default{
-  components:{
+
+export default {
+  components: {
     List
   },
-  created(){
-    this.fetchData().then(_=>{
-      //this.inputTitle = this.board.title
-      
-    })
+  data() {
+    return {
+      dragulaCards: null
+    };
   },
-  updated(){
-    console.log(this.board)
-    console.log("업데이트된 상태")
+  created() {
+    this.fetchData().then(_ => {
+      //this.inputTitle = this.board.title
+    });
+  },
+  updated() {
+    //보드 컴포넌트 내에 자식 컴포넌트가 렌더링 된 후에 설정해줘야함 자식 컴포넌트가 다 마운트된 시점 updated 훅
+    if (this.dragulaCards) this.dragulaCards.destroy();
+    this.dragulaCards = dragula([
+      ...Array.from(this.$el.querySelectorAll(".card-list"))
+    ]).on("drop", (el, wrapper, target, siblings) => {
+      const targetCard = {
+        id: el.dataset.cardId * 1,
+        pos: 65535
+      };
+      //앞 뒤에 어떤 카드가 있는지 확인
+      let prevCard = null;
+      let nextCard = null;
+
+      Array.from(wrapper.querySelectorAll(".card-item")).forEach(
+        (el, idx, arr) => {
+          const cardId = el.dataset.cardId * 1;
+          if (cardId == targetCard.id) {
+            //배열을 순회하면서 prevCard와 nextCard를 찾는 로직
+            prevCard =
+              idx > 0
+                ? {
+                    id: arr[idx - 1].dataset.cardId * 1,
+                    pos: arr[idx - 1].dataset.cardPos * 1
+                  }
+                : null;
+            nextCard =
+              idx < arr.length - 1
+                ? {
+                    id: arr[idx + 1].dataset.cardId * 1,
+                    pos: arr[idx + 1].dataset.cardPos * 1
+                  }
+                : null;
+          }
+        }
+      );
+      //이동했을 때
+      if (!prevCard && nextCard) targetCard.pos = nextCard.pos / 2;
+      else if (!nextCard && prevCard) targetCard.pos = prevCard.pos * 2;
+      else if (prevCard && nextCard)
+        targetCard.pos = (prevCard.pos + nextCard.pos) / 2;
+      this.UPDATE_CARD(targetCard);
+      console.log(targetCard);
+    });
   },
   watch: {
-    $route(){
-      this.fetchData()
+    $route() {
+      this.fetchData();
     }
   },
-  computed:{
-    ...mapState({board : "board"})
+  computed: {
+    ...mapState({ board: "board" })
   },
   methods: {
-    ...mapActions(["FETCH_BOARD"]),
-       fetchData(){
-        console.log("오잉")
-       return this.FETCH_BOARD(this.$route.params.bid)
-    },
-   
-
+    ...mapActions(["FETCH_BOARD", "UPDATE_CARD"]),
+    fetchData() {
+      return this.FETCH_BOARD(this.$route.params.bid);
+    }
   }
-}
+};
 </script>
 
 <style>
